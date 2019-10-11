@@ -1,0 +1,95 @@
+<template>
+    <section class="panel-wrapper">
+        <el-col :span="24" v-if="$p('queryPage')">
+            <el-form :inline="true" :model="searchForm">
+                <el-form-item>
+                    <el-date-picker
+                        v-model="searchForm.queryMonth"
+                        type="month"
+                        placeholder="选择年月"
+                        format='yyyy-MM'
+                        value-format='yyyy-MM'
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="searchSubmit"
+                        >查询</el-button
+                    >
+                </el-form-item>
+            </el-form>
+        </el-col>
+
+        <m-table
+            :tableConfig="tableConfig"
+            :loading="loading"
+            :data="tableData"
+        ></m-table>
+
+        <pagination
+            :total="total"
+            :pageSize="searchForm.pageSize"
+            :currentPage="searchForm.pageNo"
+            @loadData="getList"
+        ></pagination>
+    </section>
+</template>
+
+<script>
+import mTable from '@/components/mTable/mTable.vue'
+import pagination from "@/components/pagination/pagination";
+import { api } from '@/assets/js/util';
+
+export default {
+    data () {
+        return {
+            tableData: [],
+            searchForm: {
+                pageNo: 1,
+                pageSize: 50,
+                queryMonth: ''
+            },
+            total: 0,
+            loading: false,
+        }
+    },
+    computed: {
+        tableConfig () {
+            return ##
+        }
+    },
+    components: {
+        mTable,
+        pagination
+    },
+    mounted () {
+        this.getList(1, this.searchForm.pageSize);
+    },
+    methods: {
+        /**
+         * 获取列表
+         * @param pageNo
+         * @param pageSize
+         */
+        async getList (pageNo, pageSize) {
+            this.searchForm.pageNo = pageNo;
+            this.loading = true;
+            try {
+                let res = await api('&&', this.searchForm, 'post')
+                this.tableData = res.data.records;
+                this.total = res.data.total;
+            } catch (error) {
+
+            } finally {
+                this.loading = false;
+            }
+        },
+        /**
+         * 查询
+         */
+        searchSubmit () {
+            this.getList(1, this.searchForm.pageSize);
+        }
+    }
+}
+</script>
