@@ -39,7 +39,7 @@
 import mTable from '@/components/mTable/mTable.vue'
 import pagination from "@/components/pagination/pagination";
 import { api } from '@/assets/js/util';
-
+import { amountFormat } from '@/assets/js/change.js'
 export default {
     data () {
         return {
@@ -89,6 +89,15 @@ export default {
          */
         searchSubmit () {
             this.getList(1, this.searchForm.pageSize);
+        },
+        /**
+         * 金额字段格式化
+         * @param row
+         * @param column
+         * @returns {string}
+         */
+        amountFormat (row, column) {
+            return amountFormat(row[column.property] || 0)
         }
     }
 }

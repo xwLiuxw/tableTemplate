@@ -9,11 +9,7 @@
             private String skuCode;'
         />
         <button @click="change">转换</button>
-        <textarea
-            v-model="tableConfig"
-            style="width:500px;height:500px"
-            v-if="false"
-        />
+        <textarea v-model="tableConfig" style="width:500px;height:500px" />
         <textarea v-model="template" style="width:500px;height:500px" />
     </div>
 </template>
@@ -43,10 +39,16 @@ export default {
             this.temp = []
             arr.map(item => {
                 if (item) {
-                    this.temp.push({
-                        label: item.match(/(?<=").*?(?=")/)[0],
-                        prop: item.match(/(\S*);/)[1]
-                    })
+                    let label = item.match(/(?<=").*?(?=")/)[0], prop = item.match(/(\S*);/)[1]
+                    let obj = {
+                        label,
+                        prop,
+                        width: item.match(/(?<=").*?(?=")/)[0].length * 14 + 40,
+                    }
+                    if (label.indexOf("金额")!=-1 || label.indexOf("价")!=-1 || label.indexOf("价格")!=-1) {
+                        obj["formatter"] = "this.amountFormat"
+                    }
+                    this.temp.push(obj)
                 }
             })
             this.tableConfig = JSON.stringify(this.temp)
