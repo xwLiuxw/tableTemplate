@@ -5,7 +5,7 @@
             v-model="value"
             style="width:500px;height:500px"
             placeholder='JAVA注解例子：
-            @ApiModelProperty(value = "商品sku") 
+            @ApiModelProperty(value = "商品") 
             private String skuCode;'
         />
         <button @click="change">转换</button>
